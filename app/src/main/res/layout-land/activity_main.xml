@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Main Linear layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".MainActivity">
+
+
+    <!-- Constraint layout for the user inputs and results TextViews -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- TextView for the actions / inputs of the user -->
+        <TextView
+            android:id="@+id/userInputTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/light_black"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="20dp"
+            android:text="5+3="
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toStartOf="@id/resultsTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- TextView for result of the calculation -->
+        <TextView
+            android:id="@+id/resultsTextView"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingRight="30dp"
+            android:text="8"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textSize="60sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/userInputTextView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- Grid Layout for the calculator buttons  -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="4"
+        android:orientation="horizontal"
+        android:rowCount="5">
+
+        <!-- Action 'Clear' button -->
+        <Button
+            android:id="@+id/btn_clear"
+            style="@style/calcButton.action"
+            android:text="@string/text_clear" />
+
+        <!-- Action 'Backspace' button -->
+        <Button
+            android:id="@+id/btn_backspace"
+            style="@style/calcButton.action"
+            android:text="@string/text_backspace" />
+
+        <!-- Operator '/' button -->
+        <Button
+            android:id="@+id/btn_division"
+            style="@style/calcButton.operator"
+            android:text="@string/text_division" />
+
+        <!-- Operator 'X' button -->
+        <Button
+            android:id="@+id/btn_multiplication"
+            style="@style/calcButton.operator"
+            android:text="@string/text_multiplication" />
+
+        <!-- Number '7' button -->
+        <Button
+            android:id="@+id/btn_num7"
+            style="@style/calcButton.number"
+            android:text="@string/text_num7" />
+
+        <!-- Number '8' button -->
+        <Button
+            android:id="@+id/btn_num8"
+            style="@style/calcButton.number"
+            android:text="@string/text_num8" />
+
+        <!-- Number '9' button -->
+        <Button
+            android:id="@+id/btn_num9"
+            style="@style/calcButton.number"
+            android:text="@string/text_num9" />
+
+        <!-- Operator '-' button -->
+        <Button
+            android:id="@+id/btn_subtraction"
+            style="@style/calcButton.operator"
+            android:text="@string/text_subtraction" />
+
+        <!-- Number '4' button -->
+        <Button
+            android:id="@+id/btn_num4"
+            style="@style/calcButton.number"
+            android:text="@string/text_num4" />
+
+        <!-- Number '5' button -->
+        <Button
+            android:id="@+id/btn_num5"
+            style="@style/calcButton.number"
+            android:text="@string/text_num5" />
+
+        <!-- Number '6' button -->
+        <Button
+            android:id="@+id/btn_num6"
+            style="@style/calcButton.number"
+            android:text="@string/text_num6" />
+
+        <!-- Operator '+' button -->
+        <Button
+            android:id="@+id/btn_addition"
+            style="@style/calcButton.operator"
+            android:text="@string/text_addition" />
+
+        <!-- Number '1' button -->
+        <Button
+            android:id="@+id/btn_num1"
+            style="@style/calcButton.number"
+            android:text="@string/text_num1" />
+
+        <!-- Number '2' button -->
+        <Button
+            android:id="@+id/btn_num2"
+            style="@style/calcButton.number"
+            android:text="@string/text_num2" />
+
+        <!-- Number '3' button -->
+        <Button
+            android:id="@+id/btn_num3"
+            style="@style/calcButton.number"
+            android:text="@string/text_num3" />
+
+        <!-- Operator '=' button -->
+        <Button
+            android:id="@+id/btn_equals"
+            style="@style/calcButton.operator"
+            android:layout_rowSpan="2"
+            android:layout_gravity="fill_vertical"
+            android:backgroundTint="@color/green"
+            android:text="@string/text_equals"
+            android:textColor="@color/light_black" />
+
+        <!-- Action '+/-' button -->
+        <Button
+            android:id="@+id/btn_sign"
+            style="@style/calcButton.number"
+            android:text="@string/text_sign" />
+
+        <!-- Number '0' button -->
+        <Button
+            android:id="@+id/btn_num0"
+            style="@style/calcButton.number"
+            android:text="@string/text_num0" />
+
+        <!-- Action ',' button -->
+        <Button
+            android:id="@+id/btn_decimal"
+            style="@style/calcButton.number"
+            android:text="@string/text_decimal" />
+
+
+    </GridLayout>
+
+</LinearLayout>

@@ -20,6 +20,6 @@
     <string name="text_equals">=</string>
     <string name="text_clear">C</string>
     <string name="text_backspace">⌫</string>
-    <string name="text_sign">+/-</string>
-    <string name="text_decimal">,</string>
+    <string name="text_sign">-</string>
+    <string name="text_decimal">.</string>
 </resources>

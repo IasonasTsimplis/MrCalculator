@@ -1,55 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Main Linear layout -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!-- Main Linear layout for the whole screen (landscape) -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="@dimen/app_padding_standard"
     tools:context=".MainActivity">
 
 
-    <!-- Constraint layout for the user inputs and results TextViews -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- Linear horizontal layout for the user inputs and results TextViews -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
 
         <!-- TextView for the actions / inputs of the user -->
         <TextView
             android:id="@+id/userInputTextView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@color/light_black"
-            android:lines="1"
-            android:maxLines="1"
-            android:padding="20dp"
-            android:text="5+3="
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toStartOf="@id/resultsTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            style="@style/calcInputTextView.landscape"
+            android:layout_weight="1" />
 
         <!-- TextView for result of the calculation -->
         <TextView
             android:id="@+id/resultsTextView"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:maxLines="1"
-            android:paddingRight="30dp"
-            android:text="8"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="60sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/userInputTextView"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            style="@style/calcResultTextView.landscape"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 
     <!-- Grid Layout for the calculator buttons  -->

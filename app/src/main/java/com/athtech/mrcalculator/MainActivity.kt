@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.Collections
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var secondNumber: MutableList<Any> = ArrayList()
     private var lastOperator: String = ""
     private var hasResult: Boolean = false
+    private var resultTemp: String = ""
 
 
     // OnCreate state
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------
     fun handleNumberButtonClick(view: View) {
         if (view is Button) {
+            // First or second number input check
             if (lastOperator == "") {
                 firstNumber.add(view.text)
             }
@@ -50,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                     firstNumber.add(view.text)
                     resultTextView.text = ""
                     lastOperator = ""
+                    hasResult = false
                 }
                 else {
                     secondNumber.add(view.text)
@@ -62,43 +68,18 @@ class MainActivity : AppCompatActivity() {
 
     // Handle click on 'C (Clear)' and " ⌫ (Backspace)"
     //---------------------------------------------------
-    fun handleActionButtonClick(view: View,) {
+    fun handleActionButtonClick(view: View) {
         if (view.id == R.id.btn_clear) {
-            userInputTextView.text = ""
-            resultTextView.text = ""
-            lastOperator = ""
-            hasResult = false
-            firstNumber.clear()
-            secondNumber.clear()
+            clearAll()
         }
         else if (view.id == R.id.btn_backspace) {
-            val length = userInputTextView.length()
-
-            if (length > 0) {
-
-                if (userInputTextView.text.endsWith(lastOperator)) {
-                    lastOperator = ""
-                }
-                else if (userInputTextView.text.endsWith("=")) {
-                    resultTextView.text = ""
-                    hasResult = false
-                }
-                else {
-                    if (lastOperator == "") {
-                        firstNumber.removeLast()
-                    }
-                    else {
-                        secondNumber.removeLast()
-                    }
-                }
-
-                userInputTextView.text = userInputTextView.text.subSequence(0, length - 1)
-            }
+            backSpace()
         }
     }
 
 
     // Handle the click on an 'operator' button
+    //---------------------------------------------------
     fun handleOperatorButtonClick(view: View) {
 
         // If either "+", "-", "x", "/" was clicked
@@ -118,13 +99,13 @@ class MainActivity : AppCompatActivity() {
             if (hasResult) {
                 firstNumber.clear()
                 secondNumber.clear()
-                firstNumber.add(resultTextView.text)
+                firstNumber = resultTemp.toMutableList() as MutableList<Any>
                 userInputTextView.text = resultTextView.text
                 resultTextView.text = ""
             }
 
             if (view is Button){
-                lastOperator = view.text.toString()
+                lastOperator = setOperator(view.id)
                 userInputTextView.append(lastOperator)
                 hasResult = false
             }
@@ -142,16 +123,24 @@ class MainActivity : AppCompatActivity() {
                 return
             }
 
-            val firstNumberFloat = firstNumber.joinToString(prefix = "", postfix = "", separator = "").toFloat()
-            val secondNumberFloat = secondNumber.joinToString(prefix = "", postfix = "", separator = "").toFloat()
-            val result = calculate(firstNumberFloat, secondNumberFloat, lastOperator)
+            Collections.replaceAll(firstNumber, ",", ".")
+            Collections.replaceAll(secondNumber, ",", ".")
 
-            if (result.endsWith(".0")) {
-                resultTextView.text = result.replace(".0", "")
+            val firstNumberBigDecimal = firstNumber.joinToString(prefix = "", postfix = "", separator = "").toBigDecimal()
+            val secondNumberBigDecimal = secondNumber.joinToString(prefix = "", postfix = "", separator = "").toBigDecimal()
+
+            if (lastOperator == "/" && BigDecimal.ZERO.compareTo(secondNumberBigDecimal) == 0) {
+                Snackbar.make(view, "Cannot divide by zero !", 2500).show()
+                return
             }
-            else {
-                resultTextView.text = result
-            }
+
+            val result = calculate(firstNumberBigDecimal, secondNumberBigDecimal, lastOperator)
+
+            resultTemp = result.toString()
+            resultTextView.text = result.toPlainString().replace(".", ",")
+
+            // Use regex to remove any decimal trailing zeros (.00000)
+            resultTextView.text = resultTextView.text.replace(Regex("(\\,)0+\\b"), "")
 
             if (view is Button){
                 hasResult = true
@@ -162,8 +151,8 @@ class MainActivity : AppCompatActivity() {
 
 
     // Perform calculations between two numbers
-    private fun calculate(num1 :Float, num2: Float, operator: String): String {
-        var res: Float
+    private fun calculate(num1 :BigDecimal, num2: BigDecimal, operator: String): BigDecimal {
+        var res: BigDecimal
 
         if (operator == "+")
             res = num1 + num2
@@ -172,8 +161,66 @@ class MainActivity : AppCompatActivity() {
         else if (operator == "x")
             res = num1 * num2
         else
-            res = num1 / num2
+            res = num1.divide(num2, 7, RoundingMode.HALF_UP)
 
-        return res.toString()
+        return res.stripTrailingZeros()
+    }
+
+
+    // Set the operator based on the button's id that was clicked
+    private fun setOperator(id: Int) : String {
+        var oper = ""
+
+        if (id == R.id.btn_addition) {
+            oper = "+"
+        }
+        else if (id == R.id.btn_subtraction) {
+            oper = "-"
+        }
+        else if (id == R.id.btn_multiplication) {
+            oper = "x"
+        }
+        else if (id == R.id.btn_division) {
+            oper = "/"
+        }
+
+        return oper
+    }
+
+
+    // Clear everything on the calculator
+    private fun clearAll() {
+        userInputTextView.text = ""
+        resultTextView.text = ""
+        lastOperator = ""
+        hasResult = false
+        firstNumber.clear()
+        secondNumber.clear()
+    }
+
+
+    // Delete the last character in the user input textview
+    private fun backSpace() {
+        val length = userInputTextView.length()
+
+        if (length > 0) {
+
+            if (userInputTextView.text.endsWith(lastOperator) && lastOperator != "") {
+                lastOperator = ""
+            }
+            else if (userInputTextView.text.endsWith("=")) {
+                resultTextView.text = ""
+                hasResult = false
+            }
+            else {
+                if (lastOperator == "") {
+                    firstNumber.removeLast()
+                }
+                else {
+                    secondNumber.removeLast()
+                }
+            }
+            userInputTextView.text = userInputTextView.text.subSequence(0, length - 1)
+        }
     }
 }

@@ -9,4 +9,9 @@
 
     <!-- Grid cells -->
     <dimen name="grid_cell_margin">4dp</dimen>
+
+    <!-- Text view text sizes -->
+    <dimen name="textview_input_text_size">25sp</dimen>
+    <dimen name="textview_result_text_size">40sp</dimen>
+
 </resources>
